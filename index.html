@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order ID → QR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- QR library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .box {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 16px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #111;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #qr {
+      margin-top: 20px;
+    }
+
+    #download {
+      display: none;
+      margin-top: 12px;
+      background: #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h2>Generate QR</h2>
+
+    <input
+      type="text"
+      id="orderId"
+      placeholder="Enter Order ID"
+    />
+
+    <button onclick="generateQR()">Generate QR</button>
+
+    <div id="qr"></div>
+
+    <button id="download" onclick="downloadQR()">Download QR</button>
+  </div>
+
+  <script>
+    let qrInstance;
+
+    function generateQR() {
+      const orderId = document.getElementById("orderId").value.trim();
+      if (!orderId) {
+        alert("Enter Order ID");
+        return;
+      }
+
+      document.getElementById("qr").innerHTML = "";
+      qrInstance = new QRCode(document.getElementById("qr"), {
+        text: orderId,
+        width: 256,
+        height: 256
+      });
+
+      document.getElementById("download").style.display = "block";
+    }
+
+    function downloadQR() {
+      const img = document.querySelector("#qr img");
+      if (!img) return;
+
+      const link = document.createElement("a");
+      link.href = img.src;
+      link.download = "order-qr.png";
+      link.click();
+    }
+  </script>
+
+</body>
+</html>
